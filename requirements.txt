@@ -1,0 +1,18 @@
+# Core testing packages
+pytest==8.3.5
+pytest-html==4.1.1
+allure-pytest==2.14.2
+pytest-xdist==3.6.0  # For parallel test execution
+
+# Selenium related
+selenium==4.31.0
+webdriver-manager==3.8.6
+
+# API testing (if needed)
+requests==2.32.3
+
+# Utilities
+python-dotenv==1.0.0  # For environment variables
+configparser==6.0.0   # For reading config files
+pytest-check==2.2.0  # Import pytest-check for soft assertions
+pytest-timeout>=2.1.0  # For test timeout handling

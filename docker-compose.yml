@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: percepto-test
+    platform: linux/arm64
+    volumes:
+      - ./reports:/app/reports
+    command: >
+      bash -c "
+        mkdir -p /app/reports/allure-results /app/reports/screenshots &&
+        pytest src/tests/ui/test_terminalx.py || true
+      "
+    environment:
+      - CI=true
+
+  allure:
+    image: frankescobar/allure-docker-service:latest
+    platform: linux/arm64
+    ports:
+      - "4040:4040"
+    volumes:
+      - ./reports/allure-results:/app/allure-results
+    command: >
+      bash -c "
+        echo 'Starting Allure report server...' &&
+        echo '🌐 Allure reports will be available at: http://localhost:4040' &&
+        allure serve /app/allure-results -p 4040 -h 0.0.0.0 ||
+        (echo 'Allure failed to serve. View HTML report at: reports/report.html' && exit 0)
+      "
+    environment:
+      - CHECK_RESULTS_EVERY_SECONDS=5
+      - KEEP_HISTORY=1
+
+volumes:
+  reports:
